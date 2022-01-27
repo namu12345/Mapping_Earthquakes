@@ -15,6 +15,12 @@ let satelliteStreets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/sate
 	accessToken: API_KEY
 });
 
+let dark = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+	maxZoom: 18,
+	accessToken: API_KEY
+});
+
 // Create the map object with center, zoom level and default layer.
 let map = L.map('mapid', {
 	center: [40.7, -94.5],
@@ -25,7 +31,8 @@ let map = L.map('mapid', {
 // Create a base layer that holds all three maps.
 let baseMaps = {
   "Streets": streets,
-  "Satellite": satelliteStreets
+  "Satellite": satelliteStreets,
+  "Dark": dark
 };
 
 // 1. Add a 2nd layer group for the tectonic plate data.
@@ -173,15 +180,16 @@ legend.onAdd = function() {
 
 // 5. Change the color function to use three colors for the major earthquakes based on the magnitude of the earthquake.
 function getColor(magnitude) {
-  if (magnitude < 5) {
-    return "pink";
-  }
   if (magnitude > 6) {
-    return "purple";
+    return "#ea2c2c" ;
   }
-  return "mediumvioletred"
+  if (magnitude > 5) {
+    return "#98ee00"
+  }
+  return "#eecc00"
   
 };
+
 
 // 6. Use the function that determines the radius of the major earthquake marker based on its magnitude.
 function getRadius(magnitude) {
